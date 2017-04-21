@@ -1,0 +1,14 @@
+// Bootstrap
+$bootstrap-sass-asset-helper: true;
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss';
+@import '../../node_modules/ng2-toastr/ng2-toastr';
+@import '../../node_modules/angular2-busy/build/style/busy';
+
+// styles in src/style directory are applied to the whole page
+body {
+    background: #0147A7;
+    color: #fff;
+}
+a {
+    color: #03A9F4;
+}
