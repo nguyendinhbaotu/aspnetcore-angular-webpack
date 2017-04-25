@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -16,11 +17,11 @@ module.exports = {
 	},
 
 	resolve: {
-		extensions: ['', '.ts', '.js']
+		extensions: ['*', '.ts', '.js']
 	},
 
 	module: {
-		loaders: [
+		rules: [
 			// angular2 typescript loader
 			{
 				test: /\.ts$/,
@@ -30,7 +31,7 @@ module.exports = {
 			// html loader
 			{
 				test: /\.html$/,
-				loader: 'raw',
+				loader: 'raw-loader',
 				include: [clientAppShared]
 			},
 			// static assets
@@ -48,9 +49,8 @@ module.exports = {
 			// css global which not include in components
 			{
 				test: /\.css$/,
-				include: [clientAppShared],
-				exclude: [clientAppSharedApp],
-				loader: [ExtractTextPlugin.extract('raw-loader')]
+				include: [clientAppSharedApp],
+				loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader']})
 			},
 			// SASS loader and inject into components      
 			{
@@ -63,8 +63,9 @@ module.exports = {
 				test: /\.scss$/,
 				include: [clientAppShared],
 				exclude: [clientAppSharedApp],
-				loader: ExtractTextPlugin.extract(['raw-loader', 'sass-loader'])
+				loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader', 'sass-loader']})
 			}
+			
 		]
 	},
 
@@ -76,7 +77,6 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: `ClientApp/_LayoutTemplate.cshtml`,
 			filename: '../Views/Shared/_Layout.cshtml',
-			// excludeChunks: ['widget']
 		}),
 
 		new CopyWebpackPlugin([
@@ -88,6 +88,43 @@ module.exports = {
 			jQuery: 'jquery',
 			$: 'jquery',
 			jquery: 'jquery'
-		})
+		}),
+
+		// Tslint configuration for webpack 2
+		new webpack.LoaderOptionsPlugin({
+			options: {
+				/**
+				 * Apply the tslint loader as pre/postLoader
+				 * Reference: https://github.com/wbuchwalter/tslint-loader
+				 */
+				tslint: {
+				emitErrors: false,
+				failOnHint: false
+				},
+				/**
+				 * Sass
+				 * Reference: https://github.com/jtangelder/sass-loader
+				 * Transforms .scss files to .css
+				 */
+				sassLoader: {
+				//includePaths: [path.resolve(__dirname, "node_modules/foundation-sites/scss")]
+				},
+				/**
+				 * PostCSS
+				 * Reference: https://github.com/postcss/autoprefixer-core
+				 * Add vendor prefixes to your css
+				 */
+				postcss: [
+					autoprefixer({
+						browsers: ['last 2 version']
+					})
+				]
+			}
+		}),
+
+		// Extract css files
+		// Reference: https://github.com/webpack/extract-text-webpack-plugin
+		// Disabled when in test mode or not in build mode
+		new ExtractTextPlugin({filename: 'css/[name].[hash].css'})
 	]
 };
