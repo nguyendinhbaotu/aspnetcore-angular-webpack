@@ -1,3 +1,7 @@
 AspNetCore.Angular.Webpack.Starter/AspNetCore.Angular.Webpack.Starter/node_modules/
 AspNetCore.Angular.Webpack.Starter/AspNetCore.Angular.Webpack.Starter/obj/
 AspNetCore.Angular.Webpack.Starter/AspNetCore.Angular.Webpack.Starter/bin/Debug/
+/bin/Debug
+/node_modules
+/obj
+/wwwroot
