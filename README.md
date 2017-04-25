@@ -25,6 +25,7 @@ npm install
 ```
 set ASPNETCORE_ENVIRONMENT=Development
 (or using following command if you are not able to set environment variable 'setx ASPNETCORE_ENVIRONMENT "Development"')
+npm run build:dev
 dotnet run
 ```
 
