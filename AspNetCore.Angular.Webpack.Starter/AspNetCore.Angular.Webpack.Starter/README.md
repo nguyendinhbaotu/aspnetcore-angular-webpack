@@ -52,5 +52,5 @@ npm run clean
 
 ## Publish to Folder
 ```
-dotnet bublish
+dotnet publish
 ```
